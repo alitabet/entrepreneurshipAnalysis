@@ -1,4 +1,4 @@
-# entrepreneurshipAnalysis
+# Innovation Driven Entrepreneurship Research
 
 This document presentes the implementation of the Logistic Regression model 
 to evaluate entrepreneurial quality presented by 
