@@ -25,11 +25,12 @@ public class Person implements Comparable<Person> {
     private String city;
     private String state;
     private String country;
-    private Long postcode;
+    private long postcode;
 
     // default no argument constructor
     public Person() {
         address = new ArrayList<>();
+        postcode = -1L;
     }
 
     // getters and setters:
@@ -74,12 +75,28 @@ public class Person implements Comparable<Person> {
         this.country = country;
     }
 
-    public Long getPostcode() {
+    public long getPostcode() {
         return postcode;
     }
 
-    public void setPostcode(Long postcode) {
+    public void setPostcode(long postcode) {
         this.postcode = postcode;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append(name + "\n");
+        for (String s : address) {
+            builder.append(s + "\n");
+        }
+
+        if (city != null) builder.append(city + "\n");
+        if (state != null) builder.append(state + "\n");
+        if (country != null) builder.append(country + "\n");
+        if (postcode != -1L) builder.append(postcode + "\n");
+
+        return builder.toString();
     }
 
     /**
