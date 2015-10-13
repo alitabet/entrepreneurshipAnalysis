@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * <a href="http://www.google.com/googlebooks/uspto-patents-assignments.html">
  *     Google USPTO Bulk Downloads database</a>
  * The patent has 3 types of persons:
-*   - Correspondent: Name and address of
+ *  - Correspondent: Name and address of
  *    person of correspondence
  *  - Patent Assignor: Person or entity
  *    registered as assignor of patent
@@ -25,12 +25,11 @@ public class Person implements Comparable<Person> {
     private String city;
     private String state;
     private String country;
-    private long postcode;
+    private String postcode;
 
     // default no argument constructor
     public Person() {
         address = new ArrayList<>();
-        postcode = -1L;
     }
 
     // getters and setters:
@@ -39,9 +38,7 @@ public class Person implements Comparable<Person> {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    public void setName(String name) { this.name = name; }
 
     public ArrayList<String> getAddress() {
         return address;
@@ -75,27 +72,28 @@ public class Person implements Comparable<Person> {
         this.country = country;
     }
 
-    public long getPostcode() {
+    public String getPostcode() {
         return postcode;
     }
 
-    public void setPostcode(long postcode) {
+    public void setPostcode(String postcode) {
         this.postcode = postcode;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(name + "\n");
+        builder.append(name + ", ");
         for (String s : address) {
-            builder.append(s + "\n");
+            builder.append(s + ", ");
         }
 
-        if (city != null) builder.append(city + "\n");
-        if (state != null) builder.append(state + "\n");
-        if (country != null) builder.append(country + "\n");
-        if (postcode != -1L) builder.append(postcode + "\n");
+        if (city != null)     builder.append(city + ", ");
+        if (state != null)    builder.append(state + ", ");
+        if (country != null)  builder.append(country + ", ");
+        if (postcode != null) builder.append(postcode + ", ");
 
+        builder.deleteCharAt(builder.lastIndexOf(","));
         return builder.toString();
     }
 
@@ -104,7 +102,7 @@ public class Person implements Comparable<Person> {
      * is case-insensitive, and returns zero only if names
      * match exactly.
      *
-     * TODO: Provide a less constrained matching criteria
+     * TODO: Provide a more flexible matching criteria
      *
      *
      * @param that

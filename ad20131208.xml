@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE us-patent-assignments [
+<!ELEMENT us-patent-assignments (action-key-code, transaction-date, patent-assignments)>
+<!ATTLIST us-patent-assignments  dtd-version   CDATA  #IMPLIED
+                                 date-produced CDATA  #IMPLIED>
+<!ELEMENT action-key-code (#PCDATA)>
+<!ELEMENT transaction-date (date)>
+<!ELEMENT patent-assignments (data-available-code | patent-assignment+)>
+<!ELEMENT date (#PCDATA)>
+<!ELEMENT data-available-code (#PCDATA)>
+<!ELEMENT patent-assignment (assignment-record, patent-assignors, patent-assignees, patent-properties)>
+<!ELEMENT assignment-record (reel-no, frame-no, last-update-date, purge-indicator, recorded-date, page-count?, correspondent, conveyance-text)>
+<!ELEMENT patent-assignors (patent-assignor+)>
+<!ELEMENT patent-assignees (patent-assignee+)>
+<!ELEMENT patent-properties (patent-property+)>
+<!ELEMENT reel-no (#PCDATA)>
+<!ELEMENT frame-no (#PCDATA)>
+<!ELEMENT last-update-date (date)>
+<!ELEMENT purge-indicator (#PCDATA)>
+<!ELEMENT recorded-date (date)>
+<!ELEMENT page-count (#PCDATA)>
+<!ELEMENT correspondent (name, address-1?, address-2?, address-3?, address-4?)>
+<!ELEMENT conveyance-text (#PCDATA)>
+<!ELEMENT patent-assignor (name, execution-date?, date-acknowledged?)>
+<!ELEMENT patent-assignee (name, address-1?, address-2?, city?, state?, country-name?, postcode?)>
+<!ELEMENT patent-property (document-id*, invention-title?)>
+<!ELEMENT name (#PCDATA)>
+<!ATTLIST name name-type (natural | legal)  #IMPLIED>
+<!ELEMENT address-1 (#PCDATA)>
+<!ELEMENT address-2 (#PCDATA)>
+<!ELEMENT address-3 (#PCDATA)>
+<!ELEMENT address-4 (#PCDATA)>
+<!ELEMENT execution-date (date)>
+<!ELEMENT date-acknowledged (date)>
+<!ELEMENT city (#PCDATA)>
+<!ELEMENT state (#PCDATA)>
+<!ELEMENT country-name (#PCDATA)>
+<!ELEMENT postcode (#PCDATA)>
+<!ELEMENT document-id (country, doc-number, kind?, name?, date?)>
+<!ELEMENT invention-title (#PCDATA | b | i | u | sup | sub)*>
+<!ATTLIST invention-title  id   ID     #IMPLIED
+                           lang CDATA  #REQUIRED>
+<!ELEMENT country (#PCDATA)>
+<!ELEMENT doc-number (#PCDATA)>
+<!ELEMENT kind (#PCDATA)>
+<!--bold formatting for text-->
+<!ELEMENT b (#PCDATA | i | u | smallcaps)*>
+<!--italic formatting for text-->
+<!ELEMENT i (#PCDATA | b | u | smallcaps)*>
+<!--underscore: style - single is default-->
+<!ELEMENT u (#PCDATA | b | i | smallcaps)*>
+<!ATTLIST u  style  (single | double | dash | dots )  'single' >
+<!--superscripted text-->
+<!ELEMENT sup (#PCDATA | b | u | i)*>
+<!--subscripted text-->
+<!ELEMENT sub (#PCDATA | b | u | i)*>
+<!--small capitals-->
+<!ELEMENT smallcaps (#PCDATA | b | u | i)*>
+]>
+<us-patent-assignments dtd-version="0.3" date-produced="20031112">
+<action-key-code>DA</action-key-code>
+<transaction-date><date>20131208</date></transaction-date>
+<patent-assignments>
+<patent-assignment><assignment-record><reel-no>31726</reel-no><frame-no>898</frame-no><last-update-date><date>20131208</date></last-update-date><purge-indicator>N</purge-indicator><recorded-date><date>20131205</date></recorded-date><page-count>3</page-count><correspondent><name>DEPENG BI</name><address-1>1755 PARK STREET, SUITE 200</address-1><address-2>NAPERVILLE, IL 60563</address-2></correspondent><conveyance-text>ASSIGNMENT OF ASSIGNORS INTEREST (SEE DOCUMENT FOR DETAILS).</conveyance-text></assignment-record><patent-assignors><patent-assignor><name>NOUIS, RANDY GENE</name><execution-date><date>20131127</date></execution-date></patent-assignor><patent-assignor><name>NOUIS, CYNTHIA LYNN</name><execution-date><date>20131127</date></execution-date></patent-assignor></patent-assignors><patent-assignees><patent-assignee><name>NOUIS TECHNOLOGIES, INC.</name><address-1>1006 6TH AVE. NW</address-1><city>LITTLE FALLS</city><state>MINNESOTA</state><postcode>56345</postcode></patent-assignee></patent-assignees><patent-properties><patent-property><document-id><country>US</country><doc-number>09410905</doc-number><kind>X0</kind><date>19991002</date></document-id><document-id><country>US</country><doc-number>6346056</doc-number><kind>B1</kind><date>20020212</date></document-id><invention-title lang="en">FLYWEIGHT SYSTEM</invention-title></patent-property></patent-properties></patent-assignment>
+</patent-assignments>
+</us-patent-assignments>
