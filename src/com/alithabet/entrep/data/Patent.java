@@ -8,14 +8,15 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
 /**
- * Patent is a data object to store patent information
- * read from the
+ * Patent is a data object to store patent information read from the
  * <a href="http://www.google.com/googlebooks/uspto-patents-assignments.html">
  * Google USPTO Bulk Downloads database</a>
  *
@@ -84,6 +85,46 @@ public class Patent {
 //        patentProperties = new ArrayList<>();
         inventions = new HashMap<>();
         recordedDate     = new Date();
+    }
+
+    public Person getCorrespondent() {
+        return correspondent;
+    }
+
+    public void setCorrespondent(Person correspondent) {
+        this.correspondent = correspondent;
+    }
+
+    public ArrayList<Person> getPatentAssignors() {
+        return patentAssignors;
+    }
+
+    public void setPatentAssignors(ArrayList<Person> patentAssignors) {
+        this.patentAssignors = patentAssignors;
+    }
+
+    public ArrayList<Person> getPatentAssignees() {
+        return patentAssignees;
+    }
+
+    public void setPatentAssignees(ArrayList<Person> patentAssignees) {
+        this.patentAssignees = patentAssignees;
+    }
+
+    public HashMap<String, ArrayList<PatentProperty>> getInventions() {
+        return inventions;
+    }
+
+    public void setInventions(HashMap<String, ArrayList<PatentProperty>> inventions) {
+        this.inventions = inventions;
+    }
+
+    public Date getRecordedDate() {
+        return recordedDate;
+    }
+
+    public void setRecordedDate(Date recordedDate) {
+        this.recordedDate = recordedDate;
     }
 
     /**
@@ -220,10 +261,119 @@ public class Patent {
         }
     }
 
+    /**
+     * Bulk read all patents in a given XML file
+     *
+     * @param fileName name of XML file with patents
+     * @param patents list to store resulting patents
+     */
+    public static void bulkRead(String fileName, ArrayList<Patent> patents) {
+        if (fileName == null || patents == null) {
+            throw new NullPointerException("Input to bulk read cannot be null");
+        }
+        try {
+            File in = new File(fileName);
+            DocumentBuilderFactory factory =
+                    DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(in);
+
+            // first get date string and convert it to Date format
+            String dateString = ((Element) doc.getElementsByTagName(DATE_ARRAY).item(0)).getElementsByTagName(DATE_ELEMENT).item(0).getTextContent();
+            // get the list of patent assignments
+            NodeList nList = doc.getElementsByTagName(PATENT_ARRAY);
+
+            for (int i = 0; i < nList.getLength(); i++) {
+                Patent patent = new Patent(fileName,
+                        SAVE_FORMATTER.parse(dateString), nList.item(i));
+                System.out.print(patent.toString());
+                patents.add(patent);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Exception reading file " + fileName
+                    + " " + e.getMessage());
+//            System.out.println("Exception at main");
+//            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void patentArrayToCSV(String fileName, ArrayList<Patent> patents) {
+        if (fileName == null || patents == null) {
+            throw new NullPointerException("Input to bulk read cannot be null");
+        }
+
+        // create the CSV file
+        try {
+            FileWriter writer = new FileWriter(fileName);
+
+            // First add headers
+            writer.append("Correspondent,");
+            writer.append("Assignors,");
+            writer.append("Assignees,");
+            writer.append("Invention Title,");
+            writer.append("Application Date,");
+            writer.append("Publish Date,");
+            writer.append("Issue Date\n");
+
+            for (Patent p : patents) {
+
+                // add an entry for every invention in the patent
+                HashMap<String, ArrayList<PatentProperty>> properties = p.getInventions();
+                for (String invention : properties.keySet()) {
+                    // get the correspondent
+                    writer.append(p.getCorrespondent().getName().replace(",",""));
+                    writer.append(',');
+
+                    // all the names of patent assignors
+                    StringBuilder assignors = new StringBuilder();
+                    for (Person assignor : p.getPatentAssignors()) {
+                        assignors.append(assignor.getName());
+                        assignors.append(" - ");
+                    }
+                    writer.append(assignors.toString().replace(",", ""));
+                    writer.append(',');
+
+                    // all the names of patent assignees
+                    StringBuilder assignees = new StringBuilder();
+                    for (Person assignee : p.getPatentAssignees()) {
+                        assignees.append(assignee.getName());
+                        assignees.append(" - ");
+                    }
+                    writer.append(assignees.toString().replace(",", ""));
+                    writer.append(',');
+
+                    writer.append(invention.replace(",",""));
+                    writer.append(",");
+                    
+                    // now add the relevant invention dates
+                    for (PatentProperty property : properties.get(invention)) {
+                        writer.append(Patent.DISPLAY_FORMATTER.format(property.getDate()));
+                        writer.append(",");
+                    }
+                    writer.append('\n');
+                }
+            }
+
+            // now flush the file and close it
+            writer.flush();
+            writer.close();
+        } catch (IOException e) {
+            StringBuilder message = new StringBuilder();
+            message.append("Class: ");
+            message.append(e.getClass());
+            message.append(" Cause: ");
+            message.append(e.getCause());
+            message.append(" Message: ");
+            message.append(e.getMessage());
+            throw new RuntimeException(message.toString());
+        }
+
+
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("-----------------------------------------------------------------------------------------\n");
 //        builder.append("Invention Title:\n" + title + "\n");
         builder.append("Correspondent:\n");
         builder.append(correspondent.toString() + "\n");
@@ -255,27 +405,10 @@ public class Patent {
     public static void main(String[] args) {
         final String fileName = "ad20150209.xml";
         ArrayList<Patent> patents = new ArrayList<>();
-        try {
-            File in = new File(fileName);
-            DocumentBuilderFactory factory =
-                    DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(in);
+        Patent.bulkRead(fileName, patents); // Read all patents in file
 
-            // first get date string and convert it to Date format
-            String dateString = ((Element) doc.getElementsByTagName(DATE_ARRAY).item(0)).getElementsByTagName(DATE_ELEMENT).item(0).getTextContent();
-            // get the list of patent assignments
-            NodeList nList = doc.getElementsByTagName(PATENT_ARRAY);
-
-            for (int i = 0; i < nList.getLength(); i++) {
-                Patent patent = new Patent(fileName,
-                        SAVE_FORMATTER.parse(dateString), nList.item(i));
-                System.out.print(patent.toString());
-                patents.add(patent);
-            }
-        } catch (Exception e) {
-            System.out.println("Exception at main");
-            System.out.println(e.getMessage());
-        }
+        // now create a csv file
+        String[] names = fileName.split("\\."); // get the file name to use for CSV file
+        Patent.patentArrayToCSV(names[0] + ".csv", patents);
     }
 }
