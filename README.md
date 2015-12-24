@@ -2,7 +2,7 @@
 
 This project looks at entrepreneurial data analysis...
 
-* Branch with no MVC implementation *
+*Branch with no MVC implementation*
 
 # References
 
