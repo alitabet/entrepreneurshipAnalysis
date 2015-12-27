@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * PatentArray is a data object to store patent information read from the
@@ -25,8 +27,9 @@ import java.util.HashMap;
  * @author Ali K Thabet
  */
 public class PatentArray {
-    private ArrayList<Patent> patents;      // list of patents
-    private Date              recordedDate; // recorded date
+    private ArrayList<Patent>              patents;      // list of patents
+    private Date                           recordedDate; // recorded date
+    private Map<String, ArrayList<Patent>> map; // map of string occurance to patents
 
     // default no argument constructor
     public PatentArray() {
@@ -36,22 +39,53 @@ public class PatentArray {
     /**
      * Constructor with xml file name as input.
      * To initialize the PatentArray object, we
-     * read all the patents from <em>xmlFileName</em>
+     * read all the patents from <em>fileName</em>
      * and populate the <em>patents</em> array, and
      * the corresponding <em>recordedDate</em>
-     * of the bulk file
+     * of the bulk file. The input can alternatively
+     * be a folder name containing XML files. In the
+     * folder case, all the patents are red from
+     * each XML file and stored in the patent array.
      *
-     * @param xmlFileName name of XML file containing patent information
+     * @param fileName name of XML file (or folder of XML files) containing patent information
      */
-    public PatentArray(String xmlFileName) {
+    public PatentArray(String fileName) {
         initialize();
-        bulkRead(xmlFileName);
+
+        // if we get a directory then read all XML files in it
+        File folder = new File(fileName);
+        if (folder.isDirectory()) {
+            folderBulkRead(fileName);
+        } else {
+            bulkRead(fileName);
+        }
     }
 
     // Initialize variables
     private void initialize() {
         patents      = new ArrayList<>();
         recordedDate = new Date();
+        map          = new TreeMap<>();
+    }
+
+    /**
+     * Bulk read all patents in XML file inside <em>folderName</em>
+     *
+     * @param folderName folder containing XML patent files
+     */
+    private void folderBulkRead(String folderName) {
+        File folder = new File(folderName);
+
+        File[] filesList = folder.listFiles();
+        if (filesList != null) {
+            System.out.println("Reading " + filesList.length + " files in folder " + folderName);
+            int count = 1;
+            for (File file : filesList) {
+                System.out.print(count++ + " ");
+                if (file.isFile()) bulkRead(file.getAbsolutePath());
+            }
+            System.out.print("\n");
+        }
     }
 
     /**
@@ -63,6 +97,10 @@ public class PatentArray {
         if (fileName == null) {
             throw new NullPointerException("Input to bulk read cannot be null");
         }
+
+        // check if file is xml
+        if (!fileName.endsWith(".xml")) return;
+
         try {
             File in = new File(fileName);
             DocumentBuilderFactory factory =
@@ -77,13 +115,75 @@ public class PatentArray {
             NodeList nList = doc.getElementsByTagName(Patent.PATENT_ARRAY);
 
             for (int i = 0; i < nList.getLength(); i++) {
-                Patent patent = new Patent(nList.item(i));
-                System.out.print(patent.toString());
+                Patent patent = new Patent(nList.item(i), recordedDate);
+//                System.out.print(patent.toString());
                 patents.add(patent);
             }
+
+            // once all patents are retrieved, create index map
+            addPatentsToMap();
         } catch (Exception e) {
             throw new RuntimeException("Exception reading file " + fileName
-                    + " " + e.getMessage());
+                    + " " + e.getCause());
+        }
+    }
+
+    // check if a file has .xml extension
+    private boolean isXML(String fileName) {
+        int i = fileName.lastIndexOf('.');
+
+        return i > 0 && fileName.substring(i + 1).equals("xml");
+    }
+
+    /**
+     * The patent map is an indexing map used to find
+     * the occurrence of given words in the patent
+     * array. The map is used to query keywords related
+     * to people affiliated with a patent. The query
+     * words could be individual names or addresses.
+     * The indexed words come from the patent's
+     * correspondent, assignees, and assignors
+     *
+     */
+    private void addPatentsToMap() {
+        for (Patent patent : patents) {
+            Person correspondent = patent.getCorrespondent();
+
+            for (String s : correspondent.getAllStrings()) {
+                addStringToMap(s, patent);
+            }
+
+            for (Person assignor : patent.getPatentAssignors()) {
+                for (String s : assignor.getAllStrings()) {
+                    addStringToMap(s, patent);
+                }
+            }
+
+            for (Person assignee : patent.getPatentAssignees()) {
+                for (String s : assignee.getAllStrings()) {
+                    addStringToMap(s, patent);
+                }
+            }
+        }
+    }
+
+    // add a patent to the index map using the string key
+    private void addStringToMap(String key, Patent patent) {
+        if (!map.containsKey(key)) {
+            map.put(key, new ArrayList<Patent>());
+        }
+
+        ArrayList<Patent> list = map.get(key);
+        list.add(patent);
+    }
+
+    // query the map index for a string occurrence
+    public ArrayList<Patent> queryIndex(String query) {
+        query = query.toLowerCase();
+        if (map.containsKey(query)) {
+            return map.get(query);
+        } else {
+            return new ArrayList<Patent>();
         }
     }
 
@@ -191,10 +291,30 @@ public class PatentArray {
     // unit test
     public static void main(String[] args) {
         // read all patents in fileName
-        final String fileName = "ad20150209.xml";
+//        final String fileName = "test.xml";
+        final String fileName = "Google USPTO\\ad20150224.xml"; //"ad20150209.xml";
         PatentArray patents = new PatentArray(fileName);
-        // now create a csv file
-        String[] names = fileName.split("\\."); // get the file name to use for CSV file
-        patents.patentArrayToCSV(names[0]);
+
+        // test query index
+        String query = "university";
+        for (Patent p : patents.queryIndex(query)) {
+            System.out.print(p.toString());
+        }
+//        // now create a csv file
+//        String[] names = fileName.split("\\."); // get the file name to use for CSV file
+//        patents.patentArrayToCSV(names[0]);
+
+//        String folderName = "Google USPTO";
+//
+//        File folder = new File(folderName);
+//        for (File file : folder.listFiles()) {
+//            String temp = file.getAbsolutePath();
+//            int i = temp.lastIndexOf('.');
+//            if (i > 0) {
+//                System.out.println(temp.substring(i + 1));
+//            }
+//            System.out.println(file.getAbsolutePath());
+//        }
+//        System.out.println("End");
     }
 }

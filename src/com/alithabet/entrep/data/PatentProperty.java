@@ -44,7 +44,7 @@ public class PatentProperty {
     private String documentNumber; // document number
     private String kind; // 2 character kind
     private String status; // patent status
-    private Date date; // related date
+    private Date date = new Date(); // related date
 
     // getters and setter:
 

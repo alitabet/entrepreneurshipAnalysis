@@ -98,6 +98,48 @@ public class Person implements Comparable<Person> {
     }
 
     /**
+     * This method returns all the strings
+     * related to a person's name and address
+     * in an ArrayList
+     *
+     * @return list of person related strings
+     */
+    public ArrayList<String> getAllStrings() {
+        ArrayList<String> list = new ArrayList<>();
+
+        String[] names = name.split(" ");
+        for (String s : names) list.add(s.toLowerCase());
+
+        for (String line : address) {
+            String[] addresses = line.split(" ");
+            for (String s : addresses) list.add(s.toLowerCase());
+        }
+
+        if (city != null) {
+            String[] cities = city.split(" ");
+            for (String s : cities) list.add(s.toLowerCase());
+        }
+        if (state != null) {
+            String[] states = state.split(" ");
+            for (String s : states) list.add(s.toLowerCase());
+        }
+        if (country != null) {
+            String[] countries = country.split(" ");
+            for (String s : countries) list.add(s.toLowerCase());
+        }
+        if (postcode != null) {
+            String[] postcodes = postcode.split(" ");
+            for (String s : postcodes) list.add(s.toLowerCase());
+        }
+
+        return list;
+    }
+
+//    private void addStringArrayToList(String[] strings, ArrayList<String> list) {
+//        for (String s : strings) list.add(s.toLowerCase());
+//    }
+
+    /**
      * Compares two entities by name. Current implementation
      * is case-insensitive, and returns zero only if names
      * match exactly.

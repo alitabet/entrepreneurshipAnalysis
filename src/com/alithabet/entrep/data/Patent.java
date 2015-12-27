@@ -6,6 +6,7 @@ import org.w3c.dom.NodeList;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -62,6 +63,7 @@ public class Patent {
     private ArrayList<Person>          patentAssignees;
     private HashMap<String,
             ArrayList<PatentProperty>> inventions;
+    private Date                       recordedDate;
 
     // default no argument constructor
     public Patent() {
@@ -75,9 +77,9 @@ public class Patent {
      *
      * @param node Node element containing single patent data
      */
-    public Patent(Node node) {
+    public Patent(Node node, Date date) {
         initialize();
-
+        recordedDate = date;
         readXML(node);
     }
 
@@ -87,6 +89,7 @@ public class Patent {
         patentAssignors  = new ArrayList<>();
         patentAssignees  = new ArrayList<>();
         inventions       = new HashMap<>();
+        recordedDate     = new Date();
     }
 
     public Person getCorrespondent() {
@@ -119,6 +122,14 @@ public class Patent {
 
     public void setInventions(HashMap<String, ArrayList<PatentProperty>> inventions) {
         this.inventions = inventions;
+    }
+
+    public Date getRecordedDate() {
+        return recordedDate;
+    }
+
+    public void setRecordedDate(Date recordedDate) {
+        this.recordedDate = recordedDate;
     }
 
     /**
@@ -203,6 +214,9 @@ public class Patent {
         for (int k = 0; k < properties.getLength(); k++) {
             ArrayList<PatentProperty> patentProperties = new ArrayList<>();
 
+            // check that there is an invention
+            if (((Element) properties.item(k)).getElementsByTagName(INVENTION_TITLE).getLength() <= 0) continue;
+
             String title = ((Element) properties.item(k)).getElementsByTagName(INVENTION_TITLE).item(0).getTextContent();
             NodeList documentId = ((Element) properties.item(k)).getElementsByTagName(DOCUMENT_ID_ARRAY);
             for (int j = 0; j < documentId.getLength(); j++) {
@@ -258,6 +272,9 @@ public class Patent {
     public String toString() {
         StringBuilder builder = new StringBuilder();
 //        builder.append("Invention Title:\n" + title + "\n");
+        builder.append("Last Modified:\n");
+        builder.append(DISPLAY_FORMATTER.format(recordedDate) + "\n");
+
         builder.append("Correspondent:\n");
         builder.append(correspondent.toString() + "\n");
 

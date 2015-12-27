@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE us-patent-assignments [
+<!ELEMENT us-patent-assignments (action-key-code, transaction-date, patent-assignments)>
+<!ATTLIST us-patent-assignments  dtd-version   CDATA  #IMPLIED
+                                 date-produced CDATA  #IMPLIED>
+<!ELEMENT action-key-code (#PCDATA)>
+<!ELEMENT transaction-date (date)>
+<!ELEMENT patent-assignments (data-available-code | patent-assignment+)>
+<!ELEMENT date (#PCDATA)>
+<!ELEMENT data-available-code (#PCDATA)>
+<!ELEMENT patent-assignment (assignment-record, patent-assignors, patent-assignees, patent-properties)>
+<!ELEMENT assignment-record (reel-no, frame-no, last-update-date, purge-indicator, recorded-date, page-count?, correspondent, conveyance-text)>
+<!ELEMENT patent-assignors (patent-assignor+)>
+<!ELEMENT patent-assignees (patent-assignee+)>
+<!ELEMENT patent-properties (patent-property+)>
+<!ELEMENT reel-no (#PCDATA)>
+<!ELEMENT frame-no (#PCDATA)>
+<!ELEMENT last-update-date (date)>
+<!ELEMENT purge-indicator (#PCDATA)>
+<!ELEMENT recorded-date (date)>
+<!ELEMENT page-count (#PCDATA)>
+<!ELEMENT correspondent (name, address-1?, address-2?, address-3?, address-4?)>
+<!ELEMENT conveyance-text (#PCDATA)>
+<!ELEMENT patent-assignor (name, execution-date?, date-acknowledged?)>
+<!ELEMENT patent-assignee (name, address-1?, address-2?, city?, state?, country-name?, postcode?)>
+<!ELEMENT patent-property (document-id*, invention-title?)>
+<!ELEMENT name (#PCDATA)>
+<!ATTLIST name name-type (natural | legal)  #IMPLIED>
+<!ELEMENT address-1 (#PCDATA)>
+<!ELEMENT address-2 (#PCDATA)>
+<!ELEMENT address-3 (#PCDATA)>
+<!ELEMENT address-4 (#PCDATA)>
+<!ELEMENT execution-date (date)>
+<!ELEMENT date-acknowledged (date)>
+<!ELEMENT city (#PCDATA)>
+<!ELEMENT state (#PCDATA)>
+<!ELEMENT country-name (#PCDATA)>
+<!ELEMENT postcode (#PCDATA)>
+<!ELEMENT document-id (country, doc-number, kind?, name?, date?)>
+<!ELEMENT invention-title (#PCDATA | b | i | u | sup | sub)*>
+<!ATTLIST invention-title  id   ID     #IMPLIED
+                           lang CDATA  #REQUIRED>
+<!ELEMENT country (#PCDATA)>
+<!ELEMENT doc-number (#PCDATA)>
+<!ELEMENT kind (#PCDATA)>
+<!--bold formatting for text-->
+<!ELEMENT b (#PCDATA | i | u | smallcaps)*>
+<!--italic formatting for text-->
+<!ELEMENT i (#PCDATA | b | u | smallcaps)*>
+<!--underscore: style - single is default-->
+<!ELEMENT u (#PCDATA | b | i | smallcaps)*>
+<!ATTLIST u  style  (single | double | dash | dots )  'single' >
+<!--superscripted text-->
+<!ELEMENT sup (#PCDATA | b | u | i)*>
+<!--subscripted text-->
+<!ELEMENT sub (#PCDATA | b | u | i)*>
+<!--small capitals-->
+<!ELEMENT smallcaps (#PCDATA | b | u | i)*>
+]>
+<us-patent-assignments dtd-version="0.3" date-produced="20031112">
+<action-key-code>DA</action-key-code>
+<transaction-date><date>20131208</date></transaction-date>
+<patent-assignments>
+<patent-assignment>
+      <assignment-record>
+        <reel-no>21096</reel-no>
+        <frame-no>379</frame-no>
+        <last-update-date>
+          <date>20150224</date>
+        </last-update-date>
+        <purge-indicator>N</purge-indicator>
+        <recorded-date>
+          <date>20080616</date>
+        </recorded-date>
+        <page-count>6</page-count>
+        <correspondent>
+          <name>ANDRE L. MARAIS</name>
+          <address-1>SCHWEGMAN, LUNDBERG &amp; WOESSNER, P.A.</address-1>
+          <address-2>P.O. BOX 2938</address-2>
+          <address-3>MINNEAPOLIS, MN 55402-0938</address-3>
+        </correspondent>
+        <conveyance-text>CHANGE OF NAME (SEE DOCUMENT FOR DETAILS).</conveyance-text>
+      </assignment-record>
+      <patent-assignors>
+        <patent-assignor>
+          <name>FRAUD SCIENCES LTD.</name>
+          <execution-date>
+            <date>20080430</date>
+          </execution-date>
+        </patent-assignor>
+      </patent-assignors>
+      <patent-assignees>
+        <patent-assignee>
+          <name>PAYPAL ISRAEL LTD.</name>
+          <address-1>P.O. BOX 58148</address-1>
+          <city>TEL AVIV 61580</city>
+          <country-name>ISRAEL</country-name>
+        </patent-assignee>
+      </patent-assignees>
+      <patent-properties>
+        <patent-property>
+          <document-id>
+            <country>US</country>
+            <doc-number>10492920</doc-number>
+            <kind>X0</kind>
+            <date>20040719</date>
+          </document-id>
+          <document-id>
+            <country>US</country>
+            <doc-number>20040243832</doc-number>
+            <kind>A1</kind>
+            <date>20041202</date>
+          </document-id>
+          <document-id>
+            <country>US</country>
+            <doc-number>8650103</doc-number>
+            <kind>B2</kind>
+            <date>20140211</date>
+          </document-id>
+          <invention-title lang="en">VERIFICATION OF A PERSON IDENTIFIER RECEIVED ONLINE</invention-title>
+        </patent-property>
+        <patent-property>
+          <document-id>
+            <country>US</country>
+            <doc-number>10574546</doc-number>
+            <kind>X0</kind>
+            <date>20060403</date>
+          </document-id>
+          <document-id>
+            <country>US</country>
+            <doc-number>8712919</doc-number>
+            <kind>B1</kind>
+            <date>20140429</date>
+          </document-id>
+          <invention-title lang="en">METHODS AND SYSTEMS FOR DETERMINING THE RELIABILITY OF TRANSACTION</invention-title>
+        </patent-property>
+        <patent-property>
+          <document-id>
+            <country>US</country>
+            <doc-number>10585517</doc-number>
+            <kind>X0</kind>
+            <date>20060710</date>
+          </document-id>
+          <document-id>
+            <country>US</country>
+            <doc-number>20090144408</doc-number>
+            <kind>A1</kind>
+            <date>20090604</date>
+          </document-id>
+          <document-id>
+            <country>US</country>
+            <doc-number>8966088</doc-number>
+            <kind>B2</kind>
+            <date>20150224</date>
+          </document-id>
+          <invention-title lang="en">Detecting relayed communications</invention-title>
+        </patent-property>
+        <patent-property>
+          <document-id>
+            <country>US</country>
+            <doc-number>2463890</doc-number>
+            <kind>B1</kind>
+          </document-id>
+        </patent-property>
+      </patent-properties>
+    </patent-assignment>
+</patent-assignments>
+</us-patent-assignments>
